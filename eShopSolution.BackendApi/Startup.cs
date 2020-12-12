@@ -32,6 +32,12 @@ namespace eShopSolution.BackendApi
 
             // Declare DI
             services.AddTransient<IPublicProductService, PublicProductService>();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Swagger eShopSolution", Version = "v1" });
+            });
+
             services.AddControllersWithViews();
         }
 
@@ -54,6 +60,13 @@ namespace eShopSolution.BackendApi
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger eShopSolution V1");
+            });
 
             app.UseEndpoints(endpoints =>
             {
