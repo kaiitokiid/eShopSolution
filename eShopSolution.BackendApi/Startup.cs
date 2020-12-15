@@ -1,4 +1,5 @@
 using eShopSolution.Application.Catalog.Products;
+using eShopSolution.Application.Common;
 using eShopSolution.Data.EF;
 using eShopSolution.Utilities.Constants;
 using Microsoft.AspNetCore.Builder;
@@ -32,6 +33,8 @@ namespace eShopSolution.BackendApi
 
             // Declare DI
             services.AddTransient<IPublicProductService, PublicProductService>();
+            services.AddTransient<IManageProductsService, ManageProductService>();
+            services.AddTransient<IStorageService, FileStorageService>();
 
             services.AddSwaggerGen(c =>
             {
