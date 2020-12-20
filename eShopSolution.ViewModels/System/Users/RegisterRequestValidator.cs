@@ -11,29 +11,29 @@ namespace eShopSolution.ViewModels.System.Users
     {
         public RegisterRequestValidator()
         {
-            RuleFor(x => x.FirstName).NotEmpty().WithMessage("First name is required")
-                .MaximumLength(200).WithMessage("First name can not over 200 characters");
+            RuleFor(x => x.FirstName).NotEmpty().WithMessage("Tên không được để trống")
+                .MaximumLength(200).WithMessage("Không được dài quá 200 kí tự");
 
-            RuleFor(x => x.LastName).NotEmpty().WithMessage("First name is required")
-                .MaximumLength(200).WithMessage("Last name can not over 200 characters");
+            RuleFor(x => x.LastName).NotEmpty().WithMessage("Họ không được để trống")
+                .MaximumLength(200).WithMessage("Không được dài quá 200 kí tự");
 
-            RuleFor(x => x.Dob).GreaterThan(DateTime.Now.AddYears(-100)).WithMessage("Birthday cannot greater than 100 years");
+            RuleFor(x => x.Dob).GreaterThan(DateTime.Now.AddYears(-100)).WithMessage("Ngày sinh chưa đúng định dạng");
 
-            RuleFor(x => x.Email).NotEmpty().WithMessage("Email is not required")
-                .Matches(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$").WithMessage("Email format not match");
+            RuleFor(x => x.Email).NotEmpty().WithMessage("Email không được để trống")
+                .Matches(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$").WithMessage("Email chưa đúng định dạng");
 
-            RuleFor(x => x.PhoneNumber).NotEmpty().WithMessage("PhoneNumber is not required");
+            RuleFor(x => x.PhoneNumber).NotEmpty().WithMessage("Số điện thoại không được để trống");
 
-            RuleFor(x => x.UserName).NotEmpty().WithMessage("User name is required");
+            RuleFor(x => x.UserName).NotEmpty().WithMessage("Tài khoản không được để trống");
 
-            RuleFor(x => x.PassWord).NotEmpty().WithMessage("Password is required")
-                .MinimumLength(6).WithMessage("Password is at least 6 characters");
+            RuleFor(x => x.PassWord).NotEmpty().WithMessage("Mật khẩu không được để trống")
+                .MinimumLength(6).WithMessage("Mật khẩu dài hơn 5 kí tự");
 
             RuleFor(x => x).Custom((request, context) =>
             {
                 if(request.PassWord != request.ConfirmPassWord)
                 {
-                    context.AddFailure("Confirm password is not match");
+                    context.AddFailure("Xác nhận mật khẩu chưa đúng");
                 }
             });
         }

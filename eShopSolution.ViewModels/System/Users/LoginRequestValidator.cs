@@ -11,9 +11,9 @@ namespace eShopSolution.ViewModels.System.Users
     {
         public LoginRequestValidator()
         {
-            RuleFor(x => x.UserName).NotEmpty().WithMessage("User name is required");
-            RuleFor(x => x.PassWord).NotEmpty().WithMessage("Password is required")
-                .MinimumLength(6).WithMessage("Password is at least 6 characters");
+            RuleFor(x => x.UserName).NotEmpty().WithMessage("Tài khoản không được để trống");
+            RuleFor(x => x.PassWord).NotEmpty().WithMessage("Mật khẩu không được để trống")
+                .MinimumLength(6).WithMessage("Mật khẩu dài hơn 5 kí tự");
         }
     }
 }
