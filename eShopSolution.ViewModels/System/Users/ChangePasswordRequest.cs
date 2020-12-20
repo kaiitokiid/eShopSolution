@@ -13,7 +13,7 @@ namespace eShopSolution.ViewModels.System.Users
 
         [Display(Name = "Mật khẩu cũ")]
         [DataType(DataType.Password)]
-        public string PassWord { get; set; }
+        public string OldPassWord { get; set; }
 
         [Display(Name = "Mật khẩu mới")]
         [DataType(DataType.Password)]
@@ -21,6 +21,6 @@ namespace eShopSolution.ViewModels.System.Users
 
         [Display(Name = "Xác nhận mật khẩu")]
         [DataType(DataType.Password)]
-        public string NewConfirmPassWord { get; set; }
+        public string ConfirmNewPassWord { get; set; }
     }
 }
