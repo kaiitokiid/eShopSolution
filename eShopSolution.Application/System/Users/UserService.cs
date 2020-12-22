@@ -36,7 +36,7 @@ namespace eShopSolution.Application.System.Users
         public async Task<ApiResult<string>> Authenticate(LoginRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
-            if (user == null) return null;
+            if (user == null) return new ApiErrorResult<string>("Tài khoản không tồn tại");
 
             var result = await _signInManager.PasswordSignInAsync(user, request.PassWord, request.RememberMe, true);
             if (!result.Succeeded)
@@ -101,8 +101,11 @@ namespace eShopSolution.Application.System.Users
             var query = _userManager.Users;
             if(!string.IsNullOrEmpty(request.KeyWord))
             {
-                query = query.Where(x => x.UserName == request.KeyWord
-                || x.PhoneNumber.Contains(request.KeyWord));
+                query = query.Where(x => x.UserName.Contains(request.KeyWord)
+                || x.PhoneNumber.Contains(request.KeyWord)
+                || x.Email.Contains(request.KeyWord)
+                || x.FirstName.Contains(request.KeyWord)
+                || x.LastName.Contains(request.KeyWord));
             }
 
             // Step 3: Paging
