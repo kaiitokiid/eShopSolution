@@ -28,7 +28,7 @@ namespace eShopSolution.AdminApp.Controllers
             _configuration = configuration;
         }
 
-        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 1)
         {
             var request = new GetUserPagingRequest()
             {
@@ -39,6 +39,14 @@ namespace eShopSolution.AdminApp.Controllers
             var data = await _userApiClient.GetUsersPagings(request);
             return View(data.ResultObj);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var result = await _userApiClient.GetUserById(id);
+            return View(result.ResultObj);
+        }
+
 
         [HttpGet]
         public  IActionResult Create()
@@ -64,7 +72,7 @@ namespace eShopSolution.AdminApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
-            var result = await _userApiClient.GetUserById(id); // chỗ này bị null
+            var result = await _userApiClient.GetUserById(id);
             if(result.IsSuccessed)
             {
                 var user = result.ResultObj;
