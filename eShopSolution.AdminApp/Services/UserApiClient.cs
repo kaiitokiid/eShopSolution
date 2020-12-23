@@ -24,8 +24,8 @@ namespace eShopSolution.AdminApp.Services
             IConfiguration configuration)
         {
             _httpClientFactory = httpClientFactory;
-            _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
+            _configuration = configuration;
         }
         public async Task<ApiResult<string>> Authenticate(LoginRequest request)
         {

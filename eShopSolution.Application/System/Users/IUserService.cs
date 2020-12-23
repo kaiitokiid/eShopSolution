@@ -18,7 +18,6 @@ namespace eShopSolution.Application.System.Users
 
         Task<ApiResult<bool>> Update(Guid id, UserUpdateRequest request);
 
-
         Task<ApiResult<UserViewModel>> GetUserById(Guid id);
 
         Task<ApiResult<bool>> Delete(Guid id);
