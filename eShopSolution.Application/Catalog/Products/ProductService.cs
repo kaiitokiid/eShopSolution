@@ -95,6 +95,7 @@ namespace eShopSolution.Application.Catalog.Products
                     }
                 };
             }
+
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
             return product.Id;
@@ -121,17 +122,19 @@ namespace eShopSolution.Application.Catalog.Products
             // Step 1: Select join
             var query = from p in _context.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId
-                        join pic in _context.ProductInCategories on p.Id equals pic.ProductId
-                        join c in _context.Categories on pic.CategoryId equals c.Id
-                        select new { p, pt, pic };
+                        //join pic in _context.ProductInCategories on p.Id equals pic.ProductId into product
+                        //join c in _context.Categories on pic.CategoryId equals c.Id
+                        where pt.LanguageId == request.LanguageId
+                        select new { p, pt };
             // Step 2: Filter
             if (!string.IsNullOrEmpty(request.KeyWord))
-                query = query.Where(x => x.pt.Name.Contains(request.KeyWord));
+                query = query.Where(x => x.pt.Name.Contains(request.KeyWord)
+                || x.pt.ProductId.ToString().Contains(request.KeyWord));
 
-            if(request.CategoryIds.Count > 0)
-            {
-                query = query.Where(p => request.CategoryIds.Contains(p.pic.CategoryId));
-            }
+            //if(request.CategoryIds != null &&  request.CategoryIds.Count > 0)
+            //{
+            //    query = query.Where(p => request.CategoryIds.Contains(p.pic.CategoryId));
+            //}
             // Step 3: Paging
             int totalRow = await query.CountAsync();
 
@@ -302,6 +305,7 @@ namespace eShopSolution.Application.Catalog.Products
             await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
             return fileName;
         }
+
 
         public async Task<PagedResult<ProductViewModel>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request)
         {
