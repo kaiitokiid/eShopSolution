@@ -1,5 +1,5 @@
-﻿using eShopSolution.ViewModels.Common;
-using eShopSolution.ViewModels.System.Roles;
+﻿using eShopSolution.Utilities.Constants;
+using eShopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -12,42 +12,39 @@ using System.Threading.Tasks;
 
 namespace eShopSolution.AdminApp.Services
 {
-    public class RoleApiClient :  IRoleApiClient
+    public class BaseApiClient
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public RoleApiClient(IHttpClientFactory httpClientFactory,
+        protected BaseApiClient(IHttpClientFactory httpClientFactory,
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration)
-            
         {
             _httpClientFactory = httpClientFactory;
-            _httpContextAccessor = httpContextAccessor;
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
-        public async Task<ApiResult<List<RoleViewModel>>> GetAll()
+
+        protected async Task<TRespone> GetAsync<TRespone>(string url)
         {
-            var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            var sessions = _httpContextAccessor.HttpContext.Session
+                    .GetString(SystemConstants.AppSettings.Token);
             var client = _httpClientFactory.CreateClient();
 
-            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            client.BaseAddress = new Uri(_configuration[SystemConstants.AppSettings.BaseAddress]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
 
-            var response = await client.GetAsync($"/api/roles");
+            var response = await client.GetAsync(url);
 
             var body = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
-                List<RoleViewModel> myDeserializedObjList = (List<RoleViewModel>)JsonConvert.DeserializeObject(body, typeof(List<RoleViewModel>));
-                return new ApiSuccessResult<List<RoleViewModel>>(myDeserializedObjList);
+                TRespone myDeserializedObjList = (TRespone)JsonConvert.DeserializeObject(body, typeof(TRespone));
+                return myDeserializedObjList;
             }
-
-
-            return JsonConvert.DeserializeObject<ApiErrorResult<List<RoleViewModel>>>(body);
-            //return await GetAsync<ApiResult<List<RoleViewModel>>>("/api/roles");
+            return JsonConvert.DeserializeObject<TRespone>(body);
         }
     }
 }
-            
