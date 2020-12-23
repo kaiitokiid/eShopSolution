@@ -172,7 +172,7 @@ namespace eShopSolution.Application.System.Users
             var user = await _userManager.FindByIdAsync(id.ToString());
             if (user == null)
             {
-                return new ApiErrorResult<bool>("Tài khoản đã tồn tại");
+                return new ApiErrorResult<bool>("Tài khoản không tồn tại");
             }
 
             var removeRoles = request.Roles.Where(x => x.Selected == false).Select(x => x.Name).ToList();

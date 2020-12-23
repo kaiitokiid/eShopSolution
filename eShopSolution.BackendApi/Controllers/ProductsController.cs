@@ -22,13 +22,6 @@ namespace eShopSolution.BackendApi.Controllers
             _productService = productService;
         }
 
-        //// http://localhost:port/product
-        //[HttpGet("{languageId}")]
-        //public async Task<IActionResult> GetAll( string languageId)
-        //{
-        //    var products = await _publicProductService.GetAll(languageId);
-        //    return Ok(products);
-        //}
 
         // http://localhost:port/products?pageIndex=1&pageSize=10&CategoryId=
         [HttpGet("paging")]
@@ -44,7 +37,7 @@ namespace eShopSolution.BackendApi.Controllers
         {
             var product = await _productService.GetById(productId, languageId);
             if (product == null)
-                return BadRequest("Cannot find product");
+                return BadRequest("Không tìm thấy sản phẩm!");
             return Ok(product);
         }
 
@@ -150,8 +143,22 @@ namespace eShopSolution.BackendApi.Controllers
         {
             var image = await _productService.GetImageById(imageId);
             if (image == null)
-                return BadRequest("Cannot find product");
+                return BadRequest("Không tìm thấy sản phẩm!");
             return Ok(image);
+        }
+
+        [HttpPut("{id}/categories")]
+        public async Task<IActionResult> CategoryAssign(int id, [FromBody] CategoryAssignRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _productService.CategoryAssign(id, request);
+            if (!result.IsSuccessed)
+                return BadRequest(result);
+
+            return Ok(result);
         }
     }
 }
