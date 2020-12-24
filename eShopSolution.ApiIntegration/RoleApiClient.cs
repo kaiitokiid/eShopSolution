@@ -10,9 +10,9 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace eShopSolution.AdminApp.Services
+namespace eShopSolution.ApiIntegration
 {
-    public class RoleApiClient :  IRoleApiClient
+    public class RoleApiClient : IRoleApiClient
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
@@ -21,7 +21,7 @@ namespace eShopSolution.AdminApp.Services
         public RoleApiClient(IHttpClientFactory httpClientFactory,
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration)
-            
+
         {
             _httpClientFactory = httpClientFactory;
             _httpContextAccessor = httpContextAccessor;
@@ -50,4 +50,3 @@ namespace eShopSolution.AdminApp.Services
         }
     }
 }
-            
