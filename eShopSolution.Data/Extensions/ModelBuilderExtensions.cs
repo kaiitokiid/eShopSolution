@@ -108,7 +108,7 @@ namespace eShopSolution.Data.Extensions
                 Email = "12a1nguyenquocbao1412@gmail.com",
                 NormalizedEmail = "12a1nguyenquocbao1412@gmail.com",
                 EmailConfirmed = true,
-                PasswordHash = hasher.HashPassword(null, ""),
+                PasswordHash = hasher.HashPassword(null, "Admin@123"),
                 SecurityStamp = string.Empty,
                 FirstName = "Bao",
                 LastName = "Nguyen Quoc",
