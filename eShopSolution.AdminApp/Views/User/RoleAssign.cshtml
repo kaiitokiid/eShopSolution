@@ -24,10 +24,11 @@
                 {
                     <div class="form-group">
                         <label>
-                            @Model.Roles[i].Name
+
                             <input type="checkbox" asp-for="Roles[i].Selected" />
                             <input type="hidden" asp-for="Roles[i].Id" />
                             <input type="hidden" asp-for="Roles[i].Name" />
+                            @Model.Roles[i].Name
                         </label>
                         
                         <span asp-validation-for="Roles[i].Name" class="text-danger"></span>

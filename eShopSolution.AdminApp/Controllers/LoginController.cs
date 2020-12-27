@@ -1,4 +1,4 @@
-﻿using eShopSolution.AdminApp.Services;
+﻿using eShopSolution.ApiIntegration;
 using eShopSolution.Utilities.Constants;
 using eShopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authentication;
@@ -45,8 +45,8 @@ namespace eShopSolution.AdminApp.Controllers
             var result = await _userApiClient.Authenticate(request);
             if(result.ResultObj == null)
             {
-                ModelState.AddModelError("", result.Message);
-                return View();
+                //ModelState.AddModelError("", result.Message);
+                return View(result.ResultObj);
             }
             var userPrincipal = this.ValidateToken(result.ResultObj);
             var authProperties = new AuthenticationProperties

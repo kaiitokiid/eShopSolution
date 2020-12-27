@@ -1,4 +1,5 @@
-﻿using eShopSolution.WebApp.Models;
+﻿using eShopSolution.ApiIntegration;
+using eShopSolution.WebApp.Models;
 using LazZiya.ExpressLocalization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -19,17 +20,23 @@ namespace eShopSolution.WebApp.Controllers
 
         // To localize backend strings inject ...
         private readonly ISharedCultureLocalizer _loc;
+        private readonly ISlideApiClient _slideApiClient;
 
-        public HomeController(ILogger<HomeController> logger, ISharedCultureLocalizer loc)
+        public HomeController(ILogger<HomeController> logger, 
+            ISlideApiClient slideApiClient)
         {
             _logger = logger;
-            _loc = loc;
+            _slideApiClient = slideApiClient;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var msg = _loc.GetLocalizedString("VietNamese");
-            return View();
+            var viewModel = new HomeViewModel
+            {
+                Slides = await _slideApiClient.GetAll()
+            };
+
+            return View(viewModel);
         }
 
         public IActionResult Privacy()

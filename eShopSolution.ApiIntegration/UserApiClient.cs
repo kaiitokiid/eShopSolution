@@ -11,7 +11,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace eShopSolution.AdminApp.Services
+namespace eShopSolution.ApiIntegration
 {
     public class UserApiClient : IUserApiClient
     {
@@ -58,7 +58,7 @@ namespace eShopSolution.AdminApp.Services
             return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(body);
         }
 
-        public async Task<ApiResult<UserViewModel>> GetUserById(Guid id )
+        public async Task<ApiResult<UserViewModel>> GetUserById(Guid id)
         {
             var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
             var client = _httpClientFactory.CreateClient();
