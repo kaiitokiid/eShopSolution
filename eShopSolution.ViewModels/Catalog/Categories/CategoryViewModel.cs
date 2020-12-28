@@ -12,5 +12,7 @@ namespace eShopSolution.ViewModels.Catalog.Categories
 
         public string Name { get; set; }
 
+        public int? ParentId { get; set; }
+
     }
 }
