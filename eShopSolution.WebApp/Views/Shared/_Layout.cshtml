@@ -1,6 +1,7 @@
 ﻿@{ 
     var culture = CultureInfo.CurrentCulture.Name;
 }
+@inject Microsoft.Extensions.Configuration.IConfiguration _conf;
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,33 +35,43 @@
     <style type="text/css" id="enject"></style>
 </head>
 <body>
+    <input type="hidden" id="hidCulture" value="@culture" />
+    <input type="hidden" id="hidBaseAddress" value="@_conf["BaseAddress"]" />
     <div id="header">
         <div class="container">
             <div id="welcomeLine" class="row">
-                <div class="span6">Welcome!<strong> User</strong></div>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="span6"><localize>Welcome</localize>!<strong> @User.Identity.Name</strong></div>
+                }
+                else
+                {
+                    <div class="span6"></div>
+                }
+
                 <div class="span6">
                     <div class="pull-right">
-                        
+
                         <language-nav language-label="NativeName"
-                                        cookie-handler-url="@(Url.Action("SetCultureCookie", "Home", new { area= "", cltr="{0}", returnUrl="{1}" }))">
+                                      cookie-handler-url="@(Url.Action("SetCultureCookie", "Home", new { area= "", cltr="{0}", returnUrl="{1}" }))">
 
                         </language-nav>
-                        
+
 
                         @*<a href="/en/Home/SetCultureCookie?cltr=en&returnUrl=/en"><span class="" localize-content>English</span></a>
-                        <a href="/vi/Home/SetCultureCookie?cltr=vi&returnUrl=/vi"><span class="" localize-content>Vietnamese</span></a>*@
+                            <a href="/vi/Home/SetCultureCookie?cltr=vi&returnUrl=/vi"><span class="" localize-content>Vietnamese</span></a>*@
                         @*<language-nav cookie-handler-url="@Url.Action("SetCultureCookie", "Home",
-                                         new { area="", cltr="{0}", returnUrl="{1}"})">
+                                             new { area="", cltr="{0}", returnUrl="{1}"})">
 
-                        </language-nav>*@
-                    
-                        <a href="product_summary.html">
+                            </language-nav>*@
+
+                        <a href="/@culture/cart">
                             <span class="btn btn-mini btn-primary">
                                 <i class="icon-shopping-cart icon-white"></i>
-                                [ 3 ] Itemes in your cart
+                                [ <span id="lbl_number_of_items_header">0</span> ] Itemes in your cart
                             </span>
                         </a>
-                    
+
                     </div>
                 </div>
             </div>
@@ -72,7 +83,7 @@
                     <span class="icon-bar"></span>
                 </a>
                 <div class="navbar-inner">
-                    <a class="brand" href="index.html"><img src="/themes/images/logo.png" alt="Bootsshop" /></a>
+                    <a class="brand" href="/@culture/Home/"><img src="/themes/images/logo.png" alt="Bootsshop" /></a>
                     <form class="form-inline navbar-search" method="post" action="products.html">
                         <input id="srchFld" class="srchTxt" type="text" />
                         <select class="srchTxt">
@@ -90,32 +101,22 @@
                         <li class=""><a asp-route-culture="@culture" localize-content>Delivery</a></li>
                         <li class=""><a asp-route-culture="@culture" localize-content>Contact</a></li>
                         <li class="">
-                            <a href="#login" role="button" data-toggle="modal" style="padding-right:0">
-                                <span class="btn btn-large btn-success"><localize>Login</localize></span>
-                            </a>
-                            <div id="login" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="login" aria-hidden="false">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                    <h3>Login Block</h3>
-                                </div>
-                                <div class="modal-body">
-                                    <form class="form-horizontal loginFrm">
-                                        <div class="control-group">
-                                            <input type="text" id="inputEmail" placeholder="Email">
-                                        </div>
-                                        <div class="control-group">
-                                            <input type="password" id="inputPassword" placeholder="Password">
-                                        </div>
-                                        <div class="control-group">
-                                            <label class="checkbox">
-                                                <input type="checkbox"> Remember me
-                                            </label>
-                                        </div>
-                                    </form>
-                                    <button type="submit" class="btn btn-success">Sign in</button>
-                                    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                                </div>
-                            </div>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <form action="/@culture/Account/Logout" method="post">
+                                    <button type="submit" style="padding-right:0; margin-top:10px;background:transparent; border: none">
+                                        <span class="btn btn-large btn-success"><localize>Logout</localize></span>
+                                    </button>
+                                </form>
+
+                            }
+                            else
+                            {
+                                <a href="/@culture/Account/Login" style="padding-right:0">
+                                    <span class="btn btn-large btn-success"><localize>Login</localize></span>
+                                </a>
+                            }
+
                         </li>
                     </ul>
                 </div>
@@ -182,7 +183,12 @@
 
     <script src="/themes/js/bootshop.js"></script>
     <script src="/themes/js/jquery.lightbox-0.5.js"></script>
-
+    <script src="/js/site.js"></script>
+    <script>
+        var site = new SiteController();
+        site.initialize();
+    </script>
+    @RenderSection("scripts", required: false)
     <!-- /themes switcher section ============================================================================================= -->
     <div id="secectionBox">
         <link rel="stylesheet" href="/themes/switch//themeswitch.css" type="text/css" media="screen" />
@@ -239,42 +245,7 @@
     </div>
     <span id="/themesBtn"></span>
 
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">eShopSolution.WebApp</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    @*@await RenderSectionAsync("scripts", required: false)*@
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2020 - eShopSolution.WebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.js"></script>
-    <script src="~/themes/js/jquery.lightbox-0.5.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

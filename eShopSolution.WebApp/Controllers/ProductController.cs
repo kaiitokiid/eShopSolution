@@ -1,5 +1,6 @@
 ﻿using eShopSolution.ApiIntegration;
 using eShopSolution.ViewModels.Catalog.Products;
+using eShopSolution.ViewModels.Sales;
 using eShopSolution.WebApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -27,7 +28,7 @@ namespace eShopSolution.WebApp.Controllers
             return View(new ProductDetailViewModel()
             { 
                 Product = product,
-                //Category = await _categoryApiClient.GetById(culture, id),
+                Category = await _categoryApiClient.GetById(culture, id),
                 
             });
         }
