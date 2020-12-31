@@ -10,6 +10,7 @@ namespace eShopSolution.ViewModels.Catalog.Products
 {
     public class ProductCreateRequest
     {
+        public int Id { get; set; }
         [Display(Name = "Giá bán")]
         public decimal Price { set; get; }
 

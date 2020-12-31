@@ -11,16 +11,16 @@ namespace eShopSolution.Application.Common
     public class FileStorageService : IStorageService
     {
         private readonly string _userContentFolder;
-        private const string USER_CONTENT_FOLDER_NAME = "user-content";
+        private const string PRODUCT_CONTENT_FOLDER_NAME = "product-content";
 
         public FileStorageService(IWebHostEnvironment webHostEnviroment)
         {
-            _userContentFolder = Path.Combine(webHostEnviroment.WebRootPath, USER_CONTENT_FOLDER_NAME);
+            _userContentFolder = Path.Combine(webHostEnviroment.WebRootPath, PRODUCT_CONTENT_FOLDER_NAME);
         }
 
         public string GetFileUrl(string fileName)
         {
-            return $"/{USER_CONTENT_FOLDER_NAME}/{fileName}";
+            return $"/{PRODUCT_CONTENT_FOLDER_NAME}/{fileName}";
         }
 
         public async Task SaveFileAsync(Stream mediaBinaryStream, string fileName)
