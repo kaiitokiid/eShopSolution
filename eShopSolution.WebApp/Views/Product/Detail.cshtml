@@ -57,7 +57,7 @@
                 <label class="control-label"><span>@Model.Product.Price.ToString("C", culture)</span></label>
                 <div class="controls">
                     <input type="number" class="span1" placeholder="Qty." />
-                    <button type="submit" class="btn btn-large btn-primary pull-right"><localize>Add to cart</localize>  <i class=" icon-shopping-cart"></i></button>
+                    <a class="btn btn-large btn-primary pull-right btn-add-cart" href="#" data-id="@Model.Product.Id"><localize>Add to cart</localize>  <i class=" icon-shopping-cart"></i></a>
                 </div>
             </div>
         </form>
