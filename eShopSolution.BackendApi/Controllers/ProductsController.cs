@@ -77,7 +77,7 @@ namespace eShopSolution.BackendApi.Controllers
         [HttpPut("{productId}")]
         [Consumes("multipart/form-data")]
         [Authorize]
-        public async Task<IActionResult> Update([FromRoute]int productId, [FromForm] ProductUpdateRequest request)
+        public async Task<IActionResult> Update([FromRoute]int productId, [FromBody] ProductUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {

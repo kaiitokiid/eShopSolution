@@ -40,7 +40,7 @@ namespace eShopSolution.AdminApp.Controllers
         public async Task<IActionResult> Index(LoginRequest request)
         {
             if (!ModelState.IsValid)
-                return View(request);
+                return View(ModelState);
 
             var result = await _userApiClient.Authenticate(request);
             if(result.ResultObj == null)
