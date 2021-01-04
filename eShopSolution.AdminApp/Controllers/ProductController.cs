@@ -140,11 +140,11 @@ namespace eShopSolution.AdminApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(int Id)
         {
             var languageId = HttpContext.Session.GetString(SystemConstants.AppSettings.DefaultLanguageId);
 
-            var product = await _productApiClient.GetById(id, languageId);
+            var product = await _productApiClient.GetById(Id, languageId);
             var editVm = new ProductUpdateRequest()
             {
                 Id = product.Id,
@@ -177,11 +177,17 @@ namespace eShopSolution.AdminApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult Delete(int Id)
+        public async Task<IActionResult> Delete(int Id)
         {
+            var languageId = HttpContext.Session.GetString(SystemConstants.AppSettings.DefaultLanguageId);
+
+            var product = await _productApiClient.GetById(Id, languageId);
+
             return View(new ProductDeleteRequest()
             {
-                Id = Id
+                Id = Id,
+                Name = product.Name
+                
             });
         }
 
